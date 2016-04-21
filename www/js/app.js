@@ -5,9 +5,9 @@
 // the 2nd parameter is an array of 'requires'
 // 'starter.services' is found in services.js
 // 'starter.controllers' is found in controllers.js
-angular.module('starter', ['ionic', 'starter.controllers','ngCordova','ionic-toast'])
+angular.module('starter', ['ionic', 'starter.controllers','ngCordova','ionic-toast', 'ionic-timepicker', 'ionic-datepicker'])
 
-.run(function($ionicPlatform) {
+  .run(function($ionicPlatform) {
   $ionicPlatform.ready(function() {
     // Hide the accessory bar by default (remove this to show the accessory bar above the keyboard
     // for form inputs)
@@ -22,7 +22,35 @@ angular.module('starter', ['ionic', 'starter.controllers','ngCordova','ionic-toa
     }
   });
 })
-.config(function($stateProvider, $urlRouterProvider, $ionicConfigProvider) {
+  .config(function (ionicDatePickerProvider) {
+    var datePickerObj = {
+      inputDate: new Date(),
+      setLabel: 'Aceptar',
+      todayLabel: 'Hoy',
+      closeLabel: 'Cerrar',
+      mondayFirst: true,
+      weeksList: ["L", "M", "M", "J", "V", "S", "D"],
+      monthsList: ["Enero", "Febrero", "Marzo", "Abril", "Mayo", "Junio", "Julio", "Agosto", "Septiembre", "Octubre", "Noviembre", "Diciembre"],
+      templateType: 'popup',
+      from: new Date(2012, 8, 1)
+      to: new Date(2030, 8, 1)
+      showTodayButton: true,
+      dateFormat: 'dd MMMM yyyy',
+      closeOnSelect: false
+    };
+    ionicDatePickerProvider.configDatePicker(datePickerObj);
+  })
+  .config(function (ionicTimePickerProvider) {
+      var timePickerObj = {
+        inputTime: (((new Date()).getHours() * 60 * 60) + ((new Date()).getMinutes() * 60)),
+        format: 24,
+        step: 15,
+        setLabel: 'Aceptar',
+        closeLabel: 'Cerrar'
+      };
+      ionicTimePickerProvider.configTimePicker(timePickerObj);
+    })
+  .config(function($stateProvider, $urlRouterProvider, $ionicConfigProvider) {
   $ionicConfigProvider.tabs.position('bottom');
 
   // Ionic uses AngularUI Router which uses the concept of states
@@ -38,26 +66,26 @@ angular.module('starter', ['ionic', 'starter.controllers','ngCordova','ionic-toa
     templateUrl: 'templates/tabs.html'
   })
 
-  .state('tab.noticias', {
-      url: '/noticias',
-      views: {
-        'tab-noticias': {
-          templateUrl: 'templates/tab-noticias.html',
-          controller: 'noticiasCtrl'
-        }
+    .state('tab.noticias', {
+    url: '/noticias',
+    views: {
+      'tab-noticias': {
+        templateUrl: 'templates/tab-noticias.html',
+        controller: 'noticiasCtrl'
       }
-    })
+    }
+  })
 
-  .state('tab.crear', {
-      url: '/crear',
-      views: {
-        'tab-crear': {
-          templateUrl: 'templates/tab-crear.html',
-        }
+    .state('tab.crear', {
+    url: '/crear',
+    views: {
+      'tab-crear': {
+        templateUrl: 'templates/tab-crear.html',
       }
-    })
+    }
+  })
 
-  .state('tab.account', {
+    .state('tab.account', {
     url: '/account',
     views: {
       'tab-account': {

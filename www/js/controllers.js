@@ -6,6 +6,31 @@ app.controller('AccountCtrl', function($scope) {
   };
 });
 
+app.controller('CreateCtrl', function($scope,ionicTimePicker, ionicDatePicker) {
+  $scope.time = function(){
+     var tp = {
+    callback: function (val) {      //Mandatory
+      if (typeof (val) === 'undefined') {
+        console.log('Time not selected');
+      } else {
+        var selectedTime = new Date(val * 1000);
+        console.log('Selected epoch is : ', val, 'and the time is ', selectedTime.getUTCHours(), 'H :', selectedTime.getUTCMinutes(), 'M');
+      }
+    },
+  };
+
+  ionicTimePicker.openTimePicker(tp);
+  }
+  $scope.date = function(){
+     var dt = {
+      callback: function (val) {  //Mandatory
+        console.log('Return value from the datepicker popup is : ' + val, new Date(val));
+      },
+    };
+    ionicDatePicker.openDatePicker(dt);
+  }
+});
+
 app.controller("noticiasCtrl", function($http, $scope, ionicToast, $ionicPopup, $cordovaCalendar) {
 
     $scope.init = function() {
