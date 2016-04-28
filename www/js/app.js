@@ -32,11 +32,10 @@ angular.module('starter', ['ionic', 'starter.controllers','ngCordova','ionic-toa
       weeksList: ["L", "M", "M", "J", "V", "S", "D"],
       monthsList: ["Enero", "Febrero", "Marzo", "Abril", "Mayo", "Junio", "Julio", "Agosto", "Septiembre", "Octubre", "Noviembre", "Diciembre"],
       templateType: 'popup',
-      from: new Date(2012, 8, 1)
-      to: new Date(2030, 8, 1)
-      showTodayButton: true,
+      showTodayButton: false,
       dateFormat: 'dd MMMM yyyy',
-      closeOnSelect: false
+      closeOnSelect: false,
+      disableWeekdays: [0],
     };
     ionicDatePickerProvider.configDatePicker(datePickerObj);
   })
@@ -44,7 +43,7 @@ angular.module('starter', ['ionic', 'starter.controllers','ngCordova','ionic-toa
       var timePickerObj = {
         inputTime: (((new Date()).getHours() * 60 * 60) + ((new Date()).getMinutes() * 60)),
         format: 24,
-        step: 15,
+        step: 1,
         setLabel: 'Aceptar',
         closeLabel: 'Cerrar'
       };
@@ -81,6 +80,7 @@ angular.module('starter', ['ionic', 'starter.controllers','ngCordova','ionic-toa
     views: {
       'tab-crear': {
         templateUrl: 'templates/tab-crear.html',
+        controller: 'CreateCtrl'
       }
     }
   })

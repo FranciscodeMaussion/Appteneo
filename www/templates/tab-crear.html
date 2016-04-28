@@ -1,15 +1,20 @@
 <ion-view view-title="Crear Evento">
-  <ion-content ng-init="init()">
-    <ion-list>
-      <label class="item item-input item-floating-label">
-        <span class="input-label">Titulo</span>
-        <input type="text" placeholder="Titulo">
-      </label>
-      <label class="item item-input item-floating-label">
-        <span class="input-label">Fecha</span>
-        <input type="date" placeholder="Fecha">
-      </label>
-      </ion-item>
-    </ion-list>
+  <ion-content>
+    <form ng-controller="CreateCtrl">
+      <div class="list">
+        <label class="item item-input item-floating-label">
+          <span class="input-label">Titulo</span>
+          <input type="text" placeholder="Titulo" ng-model="eTitulo">
+        </label>
+        <label class="item" ng-click="date()">
+          <span>{{fyh}}</span>
+        </label>
+        <label class="item item-input item-floating-label" >
+          <span class="input-label">Contenido</span>
+          <input type="text" placeholder="Contenido" ng-model="eContent">
+        </label>
+      </div>
+      <button class="button button-full button-energized " ng-click="sendNew()">Crear Noticia</button>
+    </form>
   </ion-content>
 </ion-view>
