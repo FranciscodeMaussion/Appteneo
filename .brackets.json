@@ -1,0 +1,7 @@
+{
+    "jscodehints.detectedExclusions": [
+        "/home/demo/Descargas/ion/google-login-with-ionic-framework-master/platforms/android/assets/www/lib/ionic/js/angular/angular-animate.js",
+        "/home/demo/Descargas/ion/google-login-with-ionic-framework-master/platforms/android/assets/www/lib/ionic/js/angular/angular-animate.min.js",
+        "/home/demo/Descargas/ion/google-login-with-ionic-framework-master/platforms/android/assets/www/lib/ionic/js/angular/angular-sanitize.min.js"
+    ]
+}
