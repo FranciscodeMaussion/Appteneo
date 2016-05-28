@@ -1,7 +1,9 @@
 {
     "jscodehints.detectedExclusions": [
-        "/home/demo/Descargas/ion/google-login-with-ionic-framework-master/platforms/android/assets/www/lib/ionic/js/angular/angular-animate.js",
-        "/home/demo/Descargas/ion/google-login-with-ionic-framework-master/platforms/android/assets/www/lib/ionic/js/angular/angular-animate.min.js",
-        "/home/demo/Descargas/ion/google-login-with-ionic-framework-master/platforms/android/assets/www/lib/ionic/js/angular/angular-sanitize.min.js"
+        "/home/demo/ionic/Appteneo-P/www/lib/ionic/js/angular/angular-sanitize.js",
+        "/home/demo/ionic/Appteneo-P/platforms/android/build/intermediates/assets/debug/www/lib/angular/angular.min.js",
+        "/home/demo/ionic/Appteneo-P/platforms/android/build/intermediates/assets/debug/www/lib/angular/angular.js",
+        "/home/demo/ionic/Appteneo-P/platforms/android/build/intermediates/assets/debug/www/lib/angular/index.js",
+        "/home/demo/ionic/Appteneo-P/platforms/android/build/intermediates/assets/debug/www/lib/ionic/js/ionic.min.js"
     ]
 }
