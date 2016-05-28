@@ -1,0 +1,18 @@
+<ion-view class="home-view">
+  <ion-nav-title>
+    <span>Noticias</span>
+  </ion-nav-title>
+  <ion-content ng-init="refresh()">
+    <ion-refresher pulling-text="Tira para actualizar..." on-refresh="refresh()"></ion-refresher>
+    <!--<button ng-click="btn()">hola tonto</button>-->
+    <ion-list>
+      <ion-item class="item item-text-wrap card" ng-repeat="blog in blogs">
+        <h1>{{blog.title}}</h1><br>
+        {{cutEvent(blog.content,0,'event-data=')}}<br>
+        <ion-option-button class="button-positive" ng-click="showConfirm(blog)" >
+          Al Calendario
+        </ion-option-button>
+      </ion-item>
+    </ion-list>
+  </ion-content>
+</ion-view>

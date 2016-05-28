@@ -1,0 +1,21 @@
+<ion-view class="home-view">
+  <ion-nav-title>
+    <span>Noticias</span>
+  </ion-nav-title>
+  <ion-content ng-init="init()">
+    <ion-list class="card">
+      <ion-item class="item item-text-wrap" ng-repeat="new in news">
+        <h2>{{new.title}}</h2>
+        {{new.published}}
+        {{new.object.content}}
+        <div ng-repeat="att in new.object.attachments">
+          <strong>{{vid(att.objectType)}}</strong>
+          <a href="{{trustSrc(att.embed.url)}}">{{trustSrc(att.embed.url)}}</a>
+          <div ng-if="vid(att.objectType)" class="video-container">
+            <iframe type="text/html" allowfullscreen frameborder="0"  src="{{trustSrc(att.embed.url)}}" frameborder="0" width="auto" height="385"></iframe>
+          </div>
+        </div>
+      </ion-item>
+    </ion-list>
+  </ion-content>
+</ion-view>
