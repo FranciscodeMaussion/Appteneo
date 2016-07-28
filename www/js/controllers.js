@@ -80,12 +80,26 @@ angular.module('controllers', [])
       url: 'https://www.googleapis.com/blogger/v3/blogs/7074297513106422012/posts/?key=AIzaSyBgvuxIG-r_45kie9fdcgokeiilTLVIa7s'
     }).then(function successCallback(response) {
       /*      alert(JSON.stringify(response));*/
-      $scope.blogs=response.data.items;
-      window.localStorage["posts"] = JSON.stringify(response.data.items);
+      var helper = response.data.items;
+      $scope.blogs = [];
+      $scope.cutEvent;
+      helper.forEach(function(aux){
+          $scope.blogs.push({
+          "title":aux.title,
+          "desc":$scope.cutEvent(aux.content,0,'event-date='),
+          "date":$scope.cutEvent($scope.cutEvent(aux.content,1,'event-date='),0,'event-place='),
+          "place":$scope.cutEvent($scope.cutEvent(aux.content,1,'event-place='),0,'event-notes='),
+          "notes":$scope.cutEvent($scope.cutEvent(aux.content,1,'event-notes='),0,'event-img='),
+          "img":$scope.cutEvent($scope.cutEvent(aux.content,1,'event-img='),0,'event-cat='),
+          "cat":$scope.cutEvent(aux.content,1,'event-cat='),
+        })
+      });
+      console.log($scope.blogs);
+      window.localStorage["posts"] = JSON.stringify($scope.blogs);
       console.log(window.localStorage["posts"]);
     }, function errorCallback(response) {
       if(window.localStorage["posts"] !== undefined) {
-        $scope.entries = JSON.parse(window.localStorage["posts"]);
+        $scope.blogs = JSON.parse(window.localStorage["posts"]);
         ionicToast.show('No es posible cargar', 'bottom', false, 2500);
         console.log('no carga');
       }
@@ -97,9 +111,10 @@ angular.module('controllers', [])
 
   $scope.cutEvent = function(string, nb, ct) {
     array = string.split(ct);
-    if (array.length == 1 && ct=='event-data=' && nb==1){
+    /*if (array.length == 1 && ct=='event-data=' && nb==1){
       return false;
-    }
+    }*/
+    console.log(array[nb]);
     return array[nb];
   }
 
@@ -113,14 +128,14 @@ angular.module('controllers', [])
   $scope.showConfirm = function(blog) {
     //titulo,lugar,notas,año,mes,dia,hora,min
     $scope.cutEvent;
-    var cont = $scope.cutEvent(blog.content,1,'event-data=');
+    var cont = blog.date;
     año = $scope.cutEvent(cont,2,'-');
     mes = $scope.cutEvent(cont,1,'-');
     dia = $scope.cutEvent(cont,0,'-');
     hora = $scope.cutEvent($scope.cutEvent(cont,3,'-'),0,':') ;
     min = $scope.cutEvent($scope.cutEvent(cont,3,'-'),1,':') ;
-    lugar = 'aca';
-    notas = 'nada';
+    lugar = blog.place;
+    notas = blog.notes;
     titulo = blog.title;
     console.log(titulo);
     console.log(lugar);

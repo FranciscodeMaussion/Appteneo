@@ -20,10 +20,10 @@
           <i class="icon ion-ionic"></i>{{blog.title}}</ion-item>
       <div style="" id="noticias-list-item-container1" class="item item-body ">
           <p class=" " style="margin-top:0px;color:#000000;" id="noticias-null">
-            {{cutEvent(blog.content,0,'event-data=')}}
+            {{blog.desc}}
           </p>
-          <span ng-if="cutEvent(blog.content,1,'event-data=')" style="font-size:10px;">{{cutEvent(blog.content,1,'event-data=')}}</span>
-          <button ng-if="cutEvent(blog.content,1,'event-data=')" style="text-align: right;" id="noticias-list-item2" class="button button-clear button-full button-calm" ng-click="showConfirm(blog)" >Agregar evento</button>
+          <span ng-if="blog.date !== ''" style="font-size:10px;">{{blog.date}}</span>
+          <button ng-if="blog.date !== ''" style="text-align: right;" id="noticias-list-item2" class="button button-clear button-full button-calm" ng-click="showConfirm(blog)" >Agregar evento</button>
       </div>
   </div>
   </ion-content>
