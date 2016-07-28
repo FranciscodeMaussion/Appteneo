@@ -1,0 +1,15 @@
+<ion-view class="home-view">
+  <ion-nav-title>
+    <span>Eventos</span>
+  </ion-nav-title>
+  <ion-content ng-init="refresh()">
+    <ion-refresher pulling-text="Tira para actualizar..." on-refresh="refresh()"></ion-refresher>
+    <!--<button ng-click="btn()">hola tonto</button>-->
+    <ion-list>
+      <ion-item class="item item-text-wrap card" ng-repeat="event in events">
+        <h1>Recuerde el evento {{event.title}}</h1><br>
+        <p>El dia {{event.dia}}, del mes {{event.mes}}, del año {{event.year}}, a las {{event.hora}}:{{event.min}} hs.</p><br>
+      </ion-item>
+    </ion-list>
+  </ion-content>
+</ion-view>

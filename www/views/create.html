@@ -1,0 +1,21 @@
+
+<ion-view view-title="Crear Evento" class="home-view">
+  <ion-nav-title>
+    <span>Noticias</span>
+  </ion-nav-title>
+  <ion-content>
+    <form ng-controller="CreateCtrl">
+      <ion-list>
+        <ion-item>
+          <ion-label floating>Titulo</ion-label>
+          <ion-input type="text" ng-model="eTitulo"></ion-input>
+        </ion-item>
+        <ion-item>
+          <ion-label floating>Contenido</ion-label>
+          <ion-textarea></ion-textarea>
+        </ion-item>
+      </ion-list>
+      <button class="button button-full button-energized ">Crear Noticia</button>
+    </form>
+  </ion-content>
+</ion-view>

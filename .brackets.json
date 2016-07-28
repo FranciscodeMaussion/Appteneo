@@ -4,6 +4,7 @@
         "/home/demo/ionic/Appteneo-P/platforms/android/build/intermediates/assets/debug/www/lib/angular/angular.min.js",
         "/home/demo/ionic/Appteneo-P/platforms/android/build/intermediates/assets/debug/www/lib/angular/angular.js",
         "/home/demo/ionic/Appteneo-P/platforms/android/build/intermediates/assets/debug/www/lib/angular/index.js",
-        "/home/demo/ionic/Appteneo-P/platforms/android/build/intermediates/assets/debug/www/lib/ionic/js/ionic.min.js"
+        "/home/demo/ionic/Appteneo-P/platforms/android/build/intermediates/assets/debug/www/lib/ionic/js/ionic.min.js",
+        "/home/demo/ionic/Appteneo-P/platforms/android/platform_www/plugins/cordova-plugin-whitelist/whitelist.js"
     ]
 }

@@ -1,9 +1,34 @@
 angular.module('controllers', [])
 
-  .controller('WelcomeCtrl', function($scope, $state, UserService, $ionicLoading) {
-  $scope.init = function(){
+  .controller('WelcomeCtrl', function($scope, $state, UserService, $ionicLoading, $ionicPlatform) {
+    $ionicPlatform.ready(function() {
+      window.plugins.googleplus.trySilentLogin(
+        {
+          'scopes': '', // optional - space-separated list of scopes, If not included or empty, defaults to `profile` and `email`.
+          'webClientId': '861143147907-6hs58aam2m6tehf2eo8sh0ji0hh9t1td.apps.googleusercontent.com', // optional - clientId of your Web application from Credentials settings of your project - On Android, this MUST be included to get an idToken. On iOS, it is not required.
+          'offline': true,
+        },
+        function (user_data) {
+          UserService.setUser({
+            userID: user_data.userId,
+            name: user_data.displayName,
+            email: user_data.email,
+            picture: user_data.imageUrl,
+            accessToken: user_data.accessToken,
+            idToken: user_data.idToken
+          });
+          $scope.logged=true;
+          $state.go('app.blog');
+        },
+        function (msg) {
+          $state.go('welcome');
+        }
+      );
+    });
+    if (!$scope.logged) {
+      $state.go('welcome');
+    }
 
-  }
   $scope.go = function(){
     $state.go('app.blog');
   }
@@ -17,7 +42,7 @@ angular.module('controllers', [])
     window.plugins.googleplus.login(
       {
         'scopes': 'https://www.googleapis.com/auth/plus.stream.read https://www.googleapis.com/auth/plus.me', // optional - space-separated list of scopes, If not included or empty, defaults to `profile` and `email`.
-        'webClientId': '', // optional - clientId of your Web application from Credentials settings of your project - On Android, this MUST be included to get an idToken. On iOS, it is not required.
+        'webClientId': '861143147907-6hs58aam2m6tehf2eo8sh0ji0hh9t1td.apps.googleusercontent.com', // optional - clientId of your Web application from Credentials settings of your project - On Android, this MUST be included to get an idToken. On iOS, it is not required.
         'offline': true,
       },
       function (user_data) {
@@ -45,41 +70,14 @@ angular.module('controllers', [])
   };
 })
 
-  .controller('AppCtrl', function($scope,$state, UserService, $ionicPlatform){
-  $ionicPlatform.ready(function() {
-    window.plugins.googleplus.trySilentLogin(
-      {
-        'scopes': 'https://www.googleapis.com/auth/plus.stream.read https://www.googleapis.com/auth/plus.me', // optional - space-separated list of scopes, If not included or empty, defaults to `profile` and `email`.
-        'webClientId': '', // optional - clientId of your Web application from Credentials settings of your project - On Android, this MUST be included to get an idToken. On iOS, it is not required.
-        'offline': true,
-      },
-      function (user_data) {
-        UserService.setUser({
-          userID: user_data.userId,
-          name: user_data.displayName,
-          email: user_data.email,
-          picture: user_data.imageUrl,
-          accessToken: user_data.accessToken,
-          idToken: user_data.idToken
-        });
-        $scope.logged=true;
-        $state.go('app.blog');
-      },
-      function (msg) {
-        $state.go('welcome');
-      }
-    );
-  });
-  if (!$scope.logged) {
-    $state.go('welcome');
-  }
+  .controller('AppCtrl', function($scope,$state){
 })
 
-  .controller('BlogCtrl', function($scope, $http, ionicToast, $cordovaCalendar, $ionicPopup){
+  .controller('BlogCtrl', function($scope, $http, ionicToast, $ionicPopup, $cordovaCalendar){
   $scope.refresh = function() {
     $http({
       method: 'GET',
-      url: 'https://www.googleapis.com/blogger/v3/blogs/7074297513106422012/posts/?key='
+      url: 'https://www.googleapis.com/blogger/v3/blogs/7074297513106422012/posts/?key=AIzaSyBgvuxIG-r_45kie9fdcgokeiilTLVIa7s'
     }).then(function successCallback(response) {
       /*      alert(JSON.stringify(response));*/
       $scope.blogs=response.data.items;
@@ -99,6 +97,9 @@ angular.module('controllers', [])
 
   $scope.cutEvent = function(string, nb, ct) {
     array = string.split(ct);
+    if (array.length == 1 && ct=='event-data=' && nb==1){
+      return false;
+    }
     return array[nb];
   }
 
@@ -113,26 +114,33 @@ angular.module('controllers', [])
     //titulo,lugar,notas,año,mes,dia,hora,min
     $scope.cutEvent;
     var cont = $scope.cutEvent(blog.content,1,'event-data=');
-    $scope.año = $scope.cutEvent(cont,2,'-');
-    $scope.mes = $scope.cutEvent(cont,1,'-');
-    $scope.dia = $scope.cutEvent(cont,0,'-');
-    $scope.hora = $scope.cutEvent($scope.cutEvent(cont,3,'-'),0,':') ;
-    $scope.min = $scope.cutEvent($scope.cutEvent(cont,3,'-'),1,':') ;
-    $scope.lugar = 'aca';
-    $scope.notas = 'nada';
-    $scope.titulo = blog.title;
-    $scope.createEvent;
+    año = $scope.cutEvent(cont,2,'-');
+    mes = $scope.cutEvent(cont,1,'-');
+    dia = $scope.cutEvent(cont,0,'-');
+    hora = $scope.cutEvent($scope.cutEvent(cont,3,'-'),0,':') ;
+    min = $scope.cutEvent($scope.cutEvent(cont,3,'-'),1,':') ;
+    lugar = 'aca';
+    notas = 'nada';
+    titulo = blog.title;
+    console.log(titulo);
+    console.log(lugar);
+    console.log(notas);
+    console.log(año);
+    console.log( mes);
+    console.log(dia);
+    console.log(hora);
+    console.log( min);
     var confirmPopup = $ionicPopup.confirm({
-      title: 'Recordarme '+ $scope.titulo,
-      template: '¿Desea que le recordemos del evento del día '+ $scope.dia +'/'+ $scope.mes +'/'+ $scope.año +'?',
+      title: 'Recordarme '+ titulo,
+      template: '¿Desea que le recordemos del evento del día '+ dia +'/'+ mes +'/'+ año +'?',
       cancelText: 'Cancelar',
       okText: 'Aceptar',
     });
 
     confirmPopup.then(function(res) {
+      $scope.createEvent;
       if(res) {
-        console.log('You are sure '+ $scope.titulo);
-        $scope.createEvent($scope.titulo,$scope.lugar,$scope.notas,$scope.año,$scope.mes,$scope.dia,$scope.hora,$scope.min);
+        $scope.createEvent(titulo, lugar, notas, año, mes, dia, hora, min);
       } else {
         console.log('You are not sure');
       }
@@ -140,20 +148,34 @@ angular.module('controllers', [])
   };
 
   $scope.createEvent = function(titulo,lugar,notas,año,mes,dia,hora,min) {
-    $cordovaCalendar.createEvent({
-      title: titulo,
-      location: lugar,
-      notes: notas,
-      startDate: new Date('20'+año, mes-1, dia, hora, min, 0, 0, 0),//año, mes(desde 0),dia,hora,min
-      endDate: new Date('20'+año, mes-1, dia+1, 0, 0, 0, 0, 0)
-    }).then(function (result) {
-      console.log("Event created successfully");
-      ionicToast.show('Evento creado', 'bottom', false, 2500);
-    }, function (err) {
-      console.error("There was an error: " + err);
-      ionicToast.show('No se pudo crear el evento', 'bottom', false, 2500);
-    });
+    $cordovaCalendar.createEventInteractively({
+        title: titulo,
+        notes: notas,
+        location: lugar,
+        startDate: new Date('20'+año, mes-1, dia, hora, min, 0, 0, 0),//año, mes(desde 0),dia,hora,min
+        endDate: new Date('20'+año, mes-1, dia+1, 0, 0, 0, 0, 0)
+      }).then(function (result) {
+        console.log("Event created successfully");
+        ionicToast.show('Evento creado', 'bottom', false, 2500);
+      }, function (err) {
+        console.error("There was an error: " + err);
+        ionicToast.show('No se pudo crear el evento', 'bottom', false, 2500);
+      });
   }
+})
+  .controller('CreateCtrl', function($scope){
+
+
+})
+  .controller('EventsCtrl', function($scope){
+
+  $scope.refresh = function(){
+    $scope.events ;
+    if(window.localStorage["events"] !== undefined) {
+      $scope.events = JSON.parse(window.localStorage["events"]);
+    }
+  }
+
 })
 
 /*  .controller('NewsCtrl', function($scope, $http, $sce){
@@ -161,7 +183,7 @@ angular.module('controllers', [])
   $scope.init = function() {
     $http({
       method: 'GET',
-      url: 'https://www.googleapis.com/plus/v1/people/106759890059555319461/activities/public?key='
+      url: 'https://www.googleapis.com/plus/v1/people/106759890059555319461/activities/public?key=AIzaSyBgvuxIG-r_45kie9fdcgokeiilTLVIa7s'
     }).then(function successCallback(response) {
       // this callback will be called asynchronously
       // when the response is available

@@ -4,7 +4,7 @@
   </ion-nav-title>
   <ion-content ng-init="refresh()">
     <ion-refresher pulling-text="Tira para actualizar..." on-refresh="refresh()"></ion-refresher>
-    <!--<button ng-click="btn()">hola tonto</button>-->
+    <!--<button ng-click="btn()">hola tonto</button>
     <ion-list>
       <ion-item class="item item-text-wrap card" ng-repeat="blog in blogs">
         <h1>{{blog.title}}</h1><br>
@@ -14,5 +14,17 @@
         </ion-option-button>
       </ion-item>
     </ion-list>
+    -->
+    <div id="noticias-card21" class="list card " ng-repeat="blog in blogs">
+      <ion-item style="" id="noticias-list-item1" class="item-icon-left  ">
+          <i class="icon ion-ionic"></i>{{blog.title}}</ion-item>
+      <div style="" id="noticias-list-item-container1" class="item item-body ">
+          <p class=" " style="margin-top:0px;color:#000000;" id="noticias-null">
+            {{cutEvent(blog.content,0,'event-data=')}}
+          </p>
+          <span ng-if="cutEvent(blog.content,1,'event-data=')" style="font-size:10px;">{{cutEvent(blog.content,1,'event-data=')}}</span>
+          <button ng-if="cutEvent(blog.content,1,'event-data=')" style="text-align: right;" id="noticias-list-item2" class="button button-clear button-full button-calm" ng-click="showConfirm(blog)" >Agregar evento</button>
+      </div>
+  </div>
   </ion-content>
 </ion-view>

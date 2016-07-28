@@ -44,6 +44,25 @@ angular.module('starter', ['ionic', 'controllers', 'services','ngCordova','ionic
     }
   })
 
+  .state('app.create', {
+    url: "/create",
+    views: {
+      'menuContent': {
+        templateUrl: "views/create.html",
+        controller: 'CreateCtrl',
+      }
+    }
+  })
+
+  .state('app.events', {
+    url: "/events",
+    views: {
+      'menuContent': {
+        templateUrl: "views/events.html",
+        controller: 'EventsCtrl',
+      }
+    }
+  })
 /*  .state('app.news', {
     url: "/news",
     views: {
@@ -67,5 +86,5 @@ angular.module('starter', ['ionic', 'controllers', 'services','ngCordova','ionic
   ;
 
   // if none of the above states are matched, use this as the fallback
-  $urlRouterProvider.otherwise('/app/blog');
+  $urlRouterProvider.otherwise('/welcome');
 })
