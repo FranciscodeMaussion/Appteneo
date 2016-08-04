@@ -4,9 +4,9 @@ angular.module('controllers', [])
     $ionicPlatform.ready(function() {
       window.plugins.googleplus.trySilentLogin(
         {
-          'scopes': '', // optional - space-separated list of scopes, If not included or empty, defaults to `profile` and `email`.
+          'scopes': 'https://www.googleapis.com/auth/blogger', // optional - space-separated list of scopes, If not included or empty, defaults to `profile` and `email`.
           'webClientId': '861143147907-6hs58aam2m6tehf2eo8sh0ji0hh9t1td.apps.googleusercontent.com', // optional - clientId of your Web application from Credentials settings of your project - On Android, this MUST be included to get an idToken. On iOS, it is not required.
-          'offline': true,
+          'offline': false,
         },
         function (user_data) {
           UserService.setUser({
@@ -41,9 +41,9 @@ angular.module('controllers', [])
 
     window.plugins.googleplus.login(
       {
-        'scopes': 'https://www.googleapis.com/auth/plus.stream.read https://www.googleapis.com/auth/plus.me', // optional - space-separated list of scopes, If not included or empty, defaults to `profile` and `email`.
+        'scopes': 'https://www.googleapis.com/auth/blogger', // optional - space-separated list of scopes, If not included or empty, defaults to `profile` and `email`.
         'webClientId': '861143147907-6hs58aam2m6tehf2eo8sh0ji0hh9t1td.apps.googleusercontent.com', // optional - clientId of your Web application from Credentials settings of your project - On Android, this MUST be included to get an idToken. On iOS, it is not required.
-        'offline': true,
+        'offline': false,
       },
       function (user_data) {
         //alert(JSON.stringify(user_data));
@@ -178,8 +178,36 @@ angular.module('controllers', [])
       });
   }
 })
-  .controller('CreateCtrl', function($scope){
-
+  .controller('CreateCtrl', function($scope, $http){
+    $scope.createPost = function(){
+    window.plugins.googleplus.trySilentLogin(
+      {
+        'scopes': 'https://www.googleapis.com/auth/blogger', // optional - space-separated list of scopes, If not included or empty, defaults to `profile` and `email`.
+        'webClientId': '861143147907-6hs58aam2m6tehf2eo8sh0ji0hh9t1td.apps.googleusercontent.com', // optional - clientId of your Web application from Credentials settings of your project - On Android, this MUST be included to get an idToken. On iOS, it is not required.
+        'offline': false,
+      },
+      function (obj) {
+        alert(JSON.stringify(obj)); // do something useful instead of alerting
+        console.log(obj.idToken);
+        $http({
+          method:'POST',
+          url: 'https://www.googleapis.com/blogger/v3/blogs/7074297513106422012/posts/',
+          data:{"kind": "blogger#post","blog": {"id": "7074297513106422012"},"title": "A new post","content": "With <b>exciting</b> content..."},
+          headers: {
+            'Authorization': ''+obj.idToken,
+            'Content-Type': 'application/json'
+          }
+        }).then(function successCallback(response) {
+          alert(JSON.stringify(response));
+        }, function errorCallback(response) {
+          alert(JSON.stringify(response));
+          console.log(JSON.stringify(response));
+        });
+      },
+      function (msg) {
+        alert('error: ' + msg);
+      });
+    }
 
 })
   .controller('EventsCtrl', function($scope){

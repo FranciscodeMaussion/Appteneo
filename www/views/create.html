@@ -1,21 +1,36 @@
-
-<ion-view view-title="Crear Evento" class="home-view">
+<ion-view view-title="Crear Noticia" class="home-view">
   <ion-nav-title>
-    <span>Noticias</span>
+    <span>Crear Noticia</span>
   </ion-nav-title>
   <ion-content>
-    <form ng-controller="CreateCtrl">
-      <ion-list>
-        <ion-item>
-          <ion-label floating>Titulo</ion-label>
-          <ion-input type="text" ng-model="eTitulo"></ion-input>
-        </ion-item>
-        <ion-item>
-          <ion-label floating>Contenido</ion-label>
-          <ion-textarea></ion-textarea>
-        </ion-item>
-      </ion-list>
-      <button class="button button-full button-energized ">Crear Noticia</button>
-    </form>
+      <div class="card">
+          <form class="list" ng-controller="CreateCtrl">
+              <label class="item item-input item-stacked-label">
+                <span class="input-label">Titulo</span>
+                <input placeholder="A pintar" type="text">
+              </label>
+              <label class="item item-input item-stacked-label">
+                <span class="input-label">Descripción</span>
+                <textarea placeholder="Nos juntamos a pintar el cotolengo."></textarea>
+              </label>
+              <label class="item item-input item-stacked-label">
+                  <span class="input-label">Fecha</span>
+                  <input placeholder="17-4-2017-11:00" type="text">
+              </label>
+              <label class="item item-input item-stacked-label">
+                  <span class="input-label">Lugar</span>
+                  <input placeholder="El cotolengo Don Orione" type="text">
+              </label>
+              <label class="item item-input item-stacked-label">
+                  <span class="input-label">Notas</span>
+                  <input placeholder="Llevar pincel y rodillo" type="text">
+              </label>
+              <label class="item item-input item-stacked-label">
+                  <span class="input-label">Link a la Imagen</span>
+                  <input placeholder="http://cdn01.ib.infobae.com/adjuntos/162/imagenes/014/014/0014014674.jpg" type="text">
+              </label>
+              <button class=" button button-positive button-clear button-full" ng-click="createPost()">Crear Noticia</button>
+          </form>
+      </div>
   </ion-content>
 </ion-view>
