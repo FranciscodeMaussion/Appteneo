@@ -30,6 +30,11 @@
       },
       "locator": "https://github.com/EddyVerbruggen/cordova-plugin-googleplus",
       "id": "cordova-plugin-googleplus"
+    },
+    "cordova-plugin-inappbrowser",
+    {
+      "locator": "https://github.com/driftyco/ionic-plugins-keyboard.git",
+      "id": "ionic-plugin-keyboard"
     }
   ],
   "cordovaPlatforms": [

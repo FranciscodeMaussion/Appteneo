@@ -1,72 +1,25 @@
 angular.module('controllers', [])
 
-  .controller('WelcomeCtrl', function($scope, $state, UserService, $ionicLoading, $ionicPlatform) {
-    $ionicPlatform.ready(function() {
-      window.plugins.googleplus.trySilentLogin(
-        {
-          'scopes': 'https://www.googleapis.com/auth/blogger', // optional - space-separated list of scopes, If not included or empty, defaults to `profile` and `email`.
-          'webClientId': '861143147907-6hs58aam2m6tehf2eo8sh0ji0hh9t1td.apps.googleusercontent.com', // optional - clientId of your Web application from Credentials settings of your project - On Android, this MUST be included to get an idToken. On iOS, it is not required.
-          'offline': false,
-        },
-        function (user_data) {
-          UserService.setUser({
-            userID: user_data.userId,
-            name: user_data.displayName,
-            email: user_data.email,
-            picture: user_data.imageUrl,
-            accessToken: user_data.accessToken,
-            idToken: user_data.idToken
-          });
-          $scope.logged=true;
-          $state.go('app.blog');
-        },
-        function (msg) {
-          $state.go('welcome');
-        }
-      );
-    });
-    if (!$scope.logged) {
-      $state.go('welcome');
-    }
-
-  $scope.go = function(){
-    $state.go('app.blog');
-  }
-
+  .controller('WelcomeCtrl', function($scope, $state, $ionicLoading, $ionicPlatform, $cordovaOauth) {
   //This method is executed when the user press the "Login with Google" button
   $scope.googleSignIn = function() {
     $ionicLoading.show({
       template: 'Logging in...'
     });
-
-    window.plugins.googleplus.login(
-      {
-        'scopes': 'https://www.googleapis.com/auth/blogger', // optional - space-separated list of scopes, If not included or empty, defaults to `profile` and `email`.
-        'webClientId': '861143147907-6hs58aam2m6tehf2eo8sh0ji0hh9t1td.apps.googleusercontent.com', // optional - clientId of your Web application from Credentials settings of your project - On Android, this MUST be included to get an idToken. On iOS, it is not required.
-        'offline': false,
-      },
-      function (user_data) {
-        //alert(JSON.stringify(user_data));
-
-        //for the purpose of this example I will store user data on local storage
-        UserService.setUser({
-          userID: user_data.userId,
-          name: user_data.displayName,
-          email: user_data.email,
-          picture: user_data.imageUrl,
-          accessToken: user_data.accessToken,
-          idToken: user_data.idToken
-        });
-        $ionicLoading.hide();
-        $scope.logged=true;
-        console.log('hola');
-        $state.go('app.blog');
-      },
-      function (msg) {
-        $ionicLoading.hide();
-        console.log(msg);
-      }
-    );
+    if (window.localStorage.getItem("access_token")){
+      $state.go('app.blog');
+      $ionicLoading.hide();
+    }else{
+    $cordovaOauth.google("861143147907-6hs58aam2m6tehf2eo8sh0ji0hh9t1td.apps.googleusercontent.com", ["https://www.googleapis.com/auth/userinfo.profile","https://www.googleapis.com/auth/userinfo.email", "https://www.googleapis.com/auth/blogger"]).then(function(result) {
+      $ionicLoading.hide();
+      alert(JSON.stringify(result));
+      window.localStorage.setItem("access_token", result.access_token);
+      $state.go('app.blog');
+    }, function(error) {
+      $ionicLoading.hide();
+      alert(error);
+    });
+    }
   };
 })
 
@@ -180,35 +133,22 @@ angular.module('controllers', [])
 })
   .controller('CreateCtrl', function($scope, $http){
     $scope.createPost = function(){
-    window.plugins.googleplus.trySilentLogin(
-      {
-        'scopes': 'https://www.googleapis.com/auth/blogger', // optional - space-separated list of scopes, If not included or empty, defaults to `profile` and `email`.
-        'webClientId': '861143147907-6hs58aam2m6tehf2eo8sh0ji0hh9t1td.apps.googleusercontent.com', // optional - clientId of your Web application from Credentials settings of your project - On Android, this MUST be included to get an idToken. On iOS, it is not required.
-        'offline': false,
-      },
-      function (obj) {
-        alert(JSON.stringify(obj)); // do something useful instead of alerting
-        console.log(obj.idToken);
         $http({
           method:'POST',
           url: 'https://www.googleapis.com/blogger/v3/blogs/7074297513106422012/posts/',
-          data:{"kind": "blogger#post","blog": {"id": "7074297513106422012"},"title": "A new post","content": "With <b>exciting</b> content..."},
+          data:{"kind": "blogger#post","blog": {"id": "7074297513106422012"},"title": "A new post","content": "Soy un genio y este es un blog creado en la appevent-date=17-4-2017-11:00event-place=Por casaevent-notes=Pintura y comidaevent-img=http://img.imagenescool.com/ic/hola/hola_032.jpgevent-cat=ateneo"},
           headers: {
-            'Authorization': ''+obj.idToken,
+            'Authorization':   "Bearer " +window.localStorage.getItem("access_token"),
             'Content-Type': 'application/json'
           }
         }).then(function successCallback(response) {
           alert(JSON.stringify(response));
+
         }, function errorCallback(response) {
           alert(JSON.stringify(response));
-          console.log(JSON.stringify(response));
+          console.log(response);
         });
-      },
-      function (msg) {
-        alert('error: ' + msg);
-      });
-    }
-
+      }
 })
   .controller('EventsCtrl', function($scope){
 
@@ -253,38 +193,5 @@ angular.module('controllers', [])
     return $sce.trustAsResourceUrl(src);
   }
 })*/
-
-  .controller('HomeCtrl', function($scope, UserService, $ionicActionSheet, $state, $ionicLoading){
-
-  $scope.user = UserService.getUser();
-
-  $scope.showLogOutMenu = function() {
-    var hideSheet = $ionicActionSheet.show({
-      destructiveText: 'Logout',
-      titleText: 'Are you sure you want to logout? This app is awsome so I recommend you to stay.',
-      cancelText: 'Cancel',
-      cancel: function() {},
-      buttonClicked: function(index) {
-        return true;
-      },
-      destructiveButtonClicked: function(){
-        $ionicLoading.show({
-          template: 'Logging out...'
-        });
-        // Google logout
-        window.plugins.googleplus.logout(
-          function (msg) {
-            console.log(msg);
-            $ionicLoading.hide();
-            $state.go('welcome');
-          },
-          function(fail){
-            console.log(fail);
-          }
-        );
-      }
-    });
-  };
-})
 
 ;
