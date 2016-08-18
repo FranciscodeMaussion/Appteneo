@@ -19,6 +19,7 @@
       <ion-item style="" id="noticias-list-item1" class="item-icon-left  ">
           <i class="icon ion-ionic"></i>{{blog.title}}</ion-item>
       <div style="" id="noticias-list-item-container1" class="item item-body ">
+          <img class="full-image" ng-if="blog.img !== ''" src="{{blog.img}}">
           <p class=" " style="margin-top:0px;color:#000000;" id="noticias-null">
             {{blog.desc}}
           </p>
@@ -28,3 +29,10 @@
   </div>
   </ion-content>
 </ion-view>
+<!--
+ion-settings  mantenimiento
+ion-paintbrush limpieza
+ion-calendar eventos
+ion-person-stalker accion social
+ion-home sede
+!-->

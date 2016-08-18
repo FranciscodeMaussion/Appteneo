@@ -7,29 +7,29 @@
           <form class="list" ng-controller="CreateCtrl">
               <label class="item item-input item-stacked-label">
                 <span class="input-label">Titulo</span>
-                <input placeholder="A pintar" type="text">
+                <input placeholder="A pintar" type="text" ng-model="event.title">
               </label>
               <label class="item item-input item-stacked-label">
                 <span class="input-label">Descripción</span>
-                <textarea placeholder="Nos juntamos a pintar el cotolengo."></textarea>
+                <textarea placeholder="Nos juntamos a pintar el cotolengo." ng-model="event.descripcion"></textarea>
               </label>
               <label class="item item-input item-stacked-label">
                   <span class="input-label">Fecha</span>
-                  <input placeholder="17-4-2017-11:00" type="text">
+                  <input placeholder="17-4-2017-11:00" type="text" ng-model="event.fecha" ng-click="date()">
               </label>
               <label class="item item-input item-stacked-label">
                   <span class="input-label">Lugar</span>
-                  <input placeholder="El cotolengo Don Orione" type="text">
+                  <input placeholder="El cotolengo Don Orione" type="text" ng-model="event.lugar">
               </label>
               <label class="item item-input item-stacked-label">
                   <span class="input-label">Notas</span>
-                  <input placeholder="Llevar pincel y rodillo" type="text">
+                  <input placeholder="Llevar pincel y rodillo" type="text" ng-model="event.notas">
               </label>
               <label class="item item-input item-stacked-label">
                   <span class="input-label">Link a la Imagen</span>
-                  <input placeholder="http://cdn01.ib.infobae.com/adjuntos/162/imagenes/014/014/0014014674.jpg" type="text">
+                  <input placeholder="http://cdn01.ib.infobae.com/adjuntos/162/imagenes/014/014/0014014674.jpg" type="text" ng-model="event.imagen">
               </label>
-              <button class=" button button-positive button-clear button-full" ng-click="createPost()">Crear Noticia</button>
+              <button class=" button button-positive button-clear button-full" ng-click="createPost(event)">Crear Noticia</button>
           </form>
       </div>
   </ion-content>

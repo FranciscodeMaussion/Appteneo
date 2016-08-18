@@ -1,36 +1,36 @@
 angular.module('controllers', [])
 
-  .controller('WelcomeCtrl', function($scope, $state, $ionicLoading, $ionicPlatform, $cordovaOauth) {
-  //This method is executed when the user press the "Login with Google" button
-  $scope.googleSignIn = function() {
-    $ionicLoading.show({
-      template: 'Logging in...'
-    });
-    if (window.localStorage.getItem("access_token")){
-      $state.go('app.blog');
-      $ionicLoading.hide();
-    }else{
-    $cordovaOauth.google("861143147907-6hs58aam2m6tehf2eo8sh0ji0hh9t1td.apps.googleusercontent.com", ["https://www.googleapis.com/auth/userinfo.profile","https://www.googleapis.com/auth/userinfo.email", "https://www.googleapis.com/auth/blogger"]).then(function(result) {
-      $ionicLoading.hide();
-      alert(JSON.stringify(result));
-      window.localStorage.setItem("access_token", result.access_token);
-      $state.go('app.blog');
-    }, function(error) {
-      $ionicLoading.hide();
-      alert(error);
-    });
-    }
-  };
+.controller('WelcomeCtrl', function($scope, $state, $ionicLoading, $ionicPlatform, $cordovaOauth) {
+//This method is executed when the user press the "Login with Google" button
+$scope.googleSignIn = function() {
+  $ionicLoading.show({
+    template: 'Logging in...'
+  });
+  /*if (window.localStorage.getItem("access_token")){
+    $state.go('app.blog');
+    $ionicLoading.hide();
+  }
+  }else{*/
+  $cordovaOauth.google("Web client id", ["https://www.googleapis.com/auth/userinfo.profile","https://www.googleapis.com/auth/userinfo.email", "https://www.googleapis.com/auth/blogger"]).then(function(result) {
+    $ionicLoading.hide();
+    alert(JSON.stringify(result));
+    window.localStorage.setItem("access_token", result.access_token);
+    $state.go('app.blog');
+  }, function(error) {
+    $ionicLoading.hide();
+    alert(error);
+  });
+};
 })
 
-  .controller('AppCtrl', function($scope,$state){
+.controller('AppCtrl', function($scope,$state){
 })
 
   .controller('BlogCtrl', function($scope, $http, ionicToast, $ionicPopup, $cordovaCalendar){
   $scope.refresh = function() {
     $http({
       method: 'GET',
-      url: 'https://www.googleapis.com/blogger/v3/blogs/7074297513106422012/posts/?key=AIzaSyBgvuxIG-r_45kie9fdcgokeiilTLVIa7s'
+      url: 'https://www.googleapis.com/blogger/v3/blogs/7074297513106422012/posts/?key=Web Api Key'
     }).then(function successCallback(response) {
       /*      alert(JSON.stringify(response));*/
       var helper = response.data.items;
@@ -94,10 +94,10 @@ angular.module('controllers', [])
     console.log(lugar);
     console.log(notas);
     console.log(año);
-    console.log( mes);
+    console.log(mes);
     console.log(dia);
     console.log(hora);
-    console.log( min);
+    console.log(min);
     var confirmPopup = $ionicPopup.confirm({
       title: 'Recordarme '+ titulo,
       template: '¿Desea que le recordemos del evento del día '+ dia +'/'+ mes +'/'+ año +'?',
@@ -120,8 +120,8 @@ angular.module('controllers', [])
         title: titulo,
         notes: notas,
         location: lugar,
-        startDate: new Date('20'+año, mes-1, dia, hora, min, 0, 0, 0),//año, mes(desde 0),dia,hora,min
-        endDate: new Date('20'+año, mes-1, dia+1, 0, 0, 0, 0, 0)
+        startDate: new Date(año, mes-1, dia, hora, min, 0, 0, 0),//año, mes(desde 0),dia,hora,min
+        endDate: new Date(año, mes-1, dia+1, 0, 0, 0, 0, 0)
       }).then(function (result) {
         console.log("Event created successfully");
         ionicToast.show('Evento creado', 'bottom', false, 2500);
@@ -131,14 +131,64 @@ angular.module('controllers', [])
       });
   }
 })
-  .controller('CreateCtrl', function($scope, $http){
-    $scope.createPost = function(){
+  .controller('CreateCtrl', function($scope, $http, $cordovaOauth, ionicTimePicker, ionicDatePicker){
+    $scope.event={
+      title:"",
+      descripcion:"",
+      lugar:"",
+      fecha:"",
+      notas:"",
+      imagen:"",
+    }
+    var t;
+    var d;
+    $cordovaOauth.google("Web client id", ["https://www.googleapis.com/auth/userinfo.profile","https://www.googleapis.com/auth/userinfo.email", "https://www.googleapis.com/auth/blogger"]).then(function(result) {
+      alert(JSON.stringify(result));
+      $scope.access_token = ("access_token", result.access_token);
+    }, function(error) {
+      alert(error);
+    });
+
+    function addZero(i) {
+      if (i < 10) {
+        i = "0" + i;
+      }
+      return i;
+    }
+    var tp = {
+      callback: function (val) {      //Mandatory
+        if (typeof (val) === 'undefined') {
+          console.log('Time not selected');
+        } else {
+          var selectedTime = new Date(val * 1000);
+          console.log('Selected epoch is : ', val, 'and the time is ', selectedTime.getUTCHours(), 'H :', selectedTime.getUTCMinutes(), 'M');
+          t =  addZero(selectedTime.getUTCHours())+":"+ addZero(selectedTime.getUTCMinutes());
+          $scope.event.fecha = d+"-"+t;
+          alert($scope.event.fecha);
+        }
+      },
+    };
+    var dt = {
+      callback: function (val) {  //Mandatory
+        console.log('Return value from the datepicker popup is : ' + val, new Date(val));
+        d = new Date(val);
+        m = d.getMonth()+1
+        d = d.getDate()+"-"+m+"-"+d.getFullYear();
+        ionicTimePicker.openTimePicker(tp);
+      },
+    };
+
+    $scope.date = function(){
+      ionicDatePicker.openDatePicker(dt);
+    }
+    $scope.createPost = function(event){
+      console.log(event);
         $http({
           method:'POST',
           url: 'https://www.googleapis.com/blogger/v3/blogs/7074297513106422012/posts/',
-          data:{"kind": "blogger#post","blog": {"id": "7074297513106422012"},"title": "A new post","content": "Soy un genio y este es un blog creado en la appevent-date=17-4-2017-11:00event-place=Por casaevent-notes=Pintura y comidaevent-img=http://img.imagenescool.com/ic/hola/hola_032.jpgevent-cat=ateneo"},
+          data:{"kind": "blogger#post","blog": {"id": "7074297513106422012"},"title": event.title,"content": event.descripcion+"event-date="+event.fecha+"event-place="+event.lugar+"event-notes="+event.notas+"event-img="+event.imagen},
           headers: {
-            'Authorization':   "Bearer " +window.localStorage.getItem("access_token"),
+            'Authorization':   "Bearer " + $scope.access_token,
             'Content-Type': 'application/json'
           }
         }).then(function successCallback(response) {
@@ -166,7 +216,7 @@ angular.module('controllers', [])
   $scope.init = function() {
     $http({
       method: 'GET',
-      url: 'https://www.googleapis.com/plus/v1/people/106759890059555319461/activities/public?key=AIzaSyBgvuxIG-r_45kie9fdcgokeiilTLVIa7s'
+      url: 'https://www.googleapis.com/plus/v1/people/106759890059555319461/activities/public?key=Web Api Key'
     }).then(function successCallback(response) {
       // this callback will be called asynchronously
       // when the response is available

@@ -6,6 +6,8 @@
   },
   "dependencies": {
     "ngGAPI": "https://github.com/christiansmith/ngGAPI.git",
-    "ng-cordova-oauth": "^0.2.10"
+    "ng-cordova-oauth": "^0.2.10",
+    "ionic-datepicker": "^1.2.0",
+    "ionic-timepicker": "^0.5.1"
   }
 }
